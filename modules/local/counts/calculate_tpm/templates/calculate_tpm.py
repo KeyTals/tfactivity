@@ -34,7 +34,10 @@ df_lengths.index = df_lengths.index.map(conversion_dict).str.upper()
 df_lengths = df_lengths / 1e3
 df_lengths = df_lengths.groupby(df_lengths.index).mean()
 
-df_lengths = df_lengths.loc[df_counts.index]
+# Keep only the genes present in both df_counts and df_lengths
+common_genes = df_counts.index.intersection(df_lengths.index)
+df_counts = df_counts.loc[common_genes]
+df_lengths = df_lengths.loc[common_genes]
 
 # Calculate TPM
 df_rpk = df_counts.div(df_lengths["length"], axis=0)
